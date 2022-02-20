@@ -22,7 +22,7 @@ namespace Hayasaka.Modules
             Music = provider.GetRequiredService<MusicService>();
         }
 
-        [SlashCommand("play", "Enqueue a track.")]
+        [SlashCommand("play", "Enqueues track.")]
         public async Task PlayCommand(string query)
         {
             await DeferAsync();
@@ -62,20 +62,20 @@ namespace Hayasaka.Modules
 
             track.Context = new QueueData(Context.User, Context.Channel as ISocketMessageChannel, thumbnail);
 
-            var embed = new EmbedBuilder();
-            embed.WithDescription($"**Track`{track.Title}` has been enqueued.**");
+            var embed = new EmbedBuilder()
+                .WithDescription($"**Enqueued `{track.Title}`**")
+                
+                .AddField(name: "Author", value: $"`{track.Author}`", inline: true)
+                .AddField(name: "Duration", value: $"`{track.Duration}`", inline: true)
+                .AddField(name: "Source", value: $"['Redirect']({track.Source})", inline: true)
 
-            embed.AddField(name: "Author", value: $"`{track.Author}`", inline: true);
-            embed.AddField(name: "Duration", value: $"`{track.Duration}`", inline: true);
-            embed.AddField(name: "Source", value: $"['Redirect']({track.Source})", inline: true);
-
-            embed.WithColor(Color.Magenta);
-            embed.WithThumbnailUrl(thumbnail);
+                .WithColor(Color.Magenta);
+                .WithThumbnailUrl(thumbnail);
 
             await FollowupAsync(embed: embed.Build());
         }
 
-        [SlashCommand("pause", "Tempoarily pauses the player")]
+        [SlashCommand("pause", "Pauses/Resumes the player.")]
         public async Task PauseCommand()
         {
             await DeferAsync();
@@ -102,7 +102,7 @@ namespace Hayasaka.Modules
             }
         }
 
-        [SlashCommand("dequeue", "Dequeue all the tracks.")]
+        [SlashCommand("dequeue", "Dequeues tracks.")]
         public async Task DequeueCommand()
         {
             await DeferAsync();
@@ -119,7 +119,7 @@ namespace Hayasaka.Modules
             await FollowupAsync($"🧹 Tracks have been dequeued.");
         }
 
-        [SlashCommand("next", "Skips to next track in queue.")]
+        [SlashCommand("next", "Skips to the next track in queue.")]
         public async Task NextCommand()
         {
             await DeferAsync();
@@ -133,7 +133,7 @@ namespace Hayasaka.Modules
             }
 
             await player.SkipAsync();
-            await FollowupAsync($"⏭ Skipped the track");
+            await FollowupAsync($"⏭ Skipped to the next track");
         }
 
         [SlashCommand("disconnect", "Disconnects from the voice channel.")]
@@ -155,7 +155,7 @@ namespace Hayasaka.Modules
 
         }
 
-        [SlashCommand("queue", "View the tracks enqueued.")]
+        [SlashCommand("queue", "View the tracks in queue.")]
         public async Task QueueCommand()
         {
             await DeferAsync();
@@ -169,7 +169,7 @@ namespace Hayasaka.Modules
 
             if (player.Queue.IsEmpty && player.CurrentTrack is null)
             {
-                await FollowupAsync("‼ There are no tracks enqueued");
+                await FollowupAsync("‼ There are no tracks in queue");
                 return;
             }
 
