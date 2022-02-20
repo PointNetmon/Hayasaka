@@ -69,7 +69,7 @@ namespace Hayasaka.Modules
                 .AddField(name: "Duration", value: $"`{track.Duration}`", inline: true)
                 .AddField(name: "Source", value: $"['Redirect']({track.Source})", inline: true)
 
-                .WithColor(Color.Magenta);
+                .WithColor(Color.Magenta)
                 .WithThumbnailUrl(thumbnail);
 
             await FollowupAsync(embed: embed.Build());
