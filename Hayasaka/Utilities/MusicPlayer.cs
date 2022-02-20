@@ -38,14 +38,9 @@ namespace Hayasaka.Utilities
                 await Message.DeleteAsync();
                 Task _ = Task.Run(async () => 
                 {
-                    await Task.Delay(800000);
+                    await Task.Delay(10000);
                     if (State != PlayerState.Playing && Queue.IsEmpty)
                     {   
-                        var embed = new EmbedBuilder();
-                        embed.WithDescription("I left because the player was inactive for 13 minutes");
-                        embed.WithColor(Color.Magenta);
-
-                        await data.Channel.SendMessageAsync(embed: embed.Build());
                         await DisconnectAsync();
                     }
                 });
